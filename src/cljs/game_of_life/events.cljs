@@ -11,4 +11,17 @@
 (re-frame/reg-event-db
   ::step
   (fn [db _]
-    (assoc db :cells (game/step db/world (:cells db)))))
+    (if (:started db)
+        (assoc db 
+               :cells (game/step db/world (:cells db))
+               :steps (inc (:steps db)))
+        db)))
+
+(re-frame/reg-event-db
+  ::toggle-start
+  (fn [db _]
+    (let [started (:started db)
+          steps (:steps db)]
+      (assoc db
+            :started (not started)
+            :steps (if started steps 0)))))

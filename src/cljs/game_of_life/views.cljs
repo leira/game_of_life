@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [game-of-life.subs :as subs]
             [game-of-life.db :as db]
+            [game-of-life.events :as events]
             [game-of-life.game :as game]))
 
 (defn cell [x y color]
@@ -29,6 +30,18 @@
     (into board
           (map (fn [[y x]] [cell (* 10 x) (* 10 y) "black"]) @cells))))
 
+(defn controls []
+  (let [started (re-frame/subscribe [::subs/started])
+        steps (re-frame/subscribe [::subs/steps])]
+    [:div
+     [:button
+      {:on-click #(re-frame/dispatch [::events/toggle-start])}
+      (if @started "Stop" "Start")]
+     [:label @steps]]))
+
 (defn main-panel []
-  (let [[h w] (map #(str (inc (* 10 %)) "px") db/world)]
-    [:div {:style {:width w :height h}} [grid]]))
+  [:div
+    [controls]
+    (let [[h w] (map #(str (inc (* 10 %)) "px") db/world)]
+      [:div {:style {:width w :height h}} [grid]])
+  ])

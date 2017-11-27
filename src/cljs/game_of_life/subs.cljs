@@ -5,3 +5,13 @@
  ::cells
  (fn [db]
    (:cells db)))
+
+(re-frame/reg-sub
+ ::started
+ (fn [db]
+   (:started db)))
+
+(re-frame/reg-sub
+ ::steps
+ (fn [db]
+   (:steps db)))
