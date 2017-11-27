@@ -11,4 +11,4 @@
 (re-frame/reg-event-db
   ::step
   (fn [db _]
-    (assoc db :world (game/step (:world db)))))
+    (assoc db :cells (game/step db/world (:cells db)))))

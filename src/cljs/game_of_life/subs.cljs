@@ -2,6 +2,6 @@
   (:require [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
- ::world
+ ::cells
  (fn [db]
-   (:world db)))
+   (:cells db)))

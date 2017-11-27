@@ -1,6 +1,7 @@
 (ns game-of-life.views
   (:require [re-frame.core :as re-frame]
             [game-of-life.subs :as subs]
+            [game-of-life.db :as db]
             [game-of-life.game :as game]))
 
 (defn cell [x y color]
@@ -14,7 +15,7 @@
           :fill color}])
 
 (defn grid []
-  (let [world (re-frame/subscribe [::subs/world])
+  (let [cells (re-frame/subscribe [::subs/cells])
         board [:svg {:width "100%" :height "100%"}
                [:defs
                 [:pattern {:id "smallGrid" :width "10" :height "10" :patternUnits "userSpaceOnUse"}
@@ -26,16 +27,8 @@
 ;               [cell 30 20 "red"]
 ;               [cell 40 20 "green"]]]
     (into board
-          (->> @world
-              (game/map-indexed-2d vector)
-              (apply concat)
-              (filter #(pos? (second %)))
-              (map (fn [[[y x] _]] [cell (* 10 x) (* 10 y) "black"]))))
-    )
-)
+          (map (fn [[y x]] [cell (* 10 x) (* 10 y) "black"]) @cells))))
 
 (defn main-panel []
-  [:div {:style {:width "801px" :height "801px"}} [grid]]
-;  (let [name (re-frame/subscribe [::subs/name])]
-;    [:div "Hello from " @name]))
-)
+  (let [[h w] (map #(str (inc (* 10 %)) "px") db/world)]
+    [:div {:style {:width w :height h}} [grid]]))
