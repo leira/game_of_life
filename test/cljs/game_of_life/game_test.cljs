@@ -28,7 +28,7 @@
              [0 1 1 0]
              [0 1 1 0]
              [0 0 0 0]]]
-      (step-test c c)))
+      (step-test (step c) c)))
   (testing "Beehive"
     (let [c [[0 0 0 0 0 0]
              [0 0 1 1 0 0]

@@ -16,7 +16,17 @@
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
+(defn dispatch-timer-event
+  []
+  (re-frame/dispatch [::events/step]))
+
 (defn ^:export init []
   (re-frame/dispatch-sync [::events/initialize-db])
+
+;; Call the dispatching function every second.
+;; `defonce` is like `def` but it ensures only one instance is ever
+;; created in the face of figwheel hot-reloading of this file.
+  (defonce do-timer (js/setInterval dispatch-timer-event 300))
+
   (dev-setup)
   (mount-root))
