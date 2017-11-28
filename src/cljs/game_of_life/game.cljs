@@ -34,3 +34,14 @@
                  (lives? (contains? cells c) nl)))
        (map first)
        (set)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn convert-plain [m]
+  (->> (clojure.string/split-lines m)
+       (map-indexed (fn [y line]
+                      (->> (clojure.string/split line "")
+                           (map-indexed (fn [x v] (if (= v "O") x nil)))
+                           (filter some?)
+                           (map (fn [x] [y x])))))
+       (apply concat) ))
+;       set))
